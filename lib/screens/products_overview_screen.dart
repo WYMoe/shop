@@ -22,6 +22,9 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('MyShop'),
+        backgroundColor: Colors.transparent,
+
+
         actions: [
           PopupMenuButton(
               onSelected: (FilterOptions option) {

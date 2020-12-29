@@ -13,9 +13,12 @@ class AppDrawer extends StatelessWidget {
           AppBar(
             title:Text('Hello!'),
             automaticallyImplyLeading: false,
+            backgroundColor: Colors.transparent,
+
           ),
           GestureDetector(
             onTap: (){
+              Navigator.pop(context);
               Navigator.pushReplacementNamed(context, '/');
             },
             child: ListTile(
@@ -23,9 +26,10 @@ class AppDrawer extends StatelessWidget {
               title: Text('MyShop'),
             ),
           ),
-          Divider(),
+
           GestureDetector(
             onTap: (){
+              Navigator.pop(context);
             Navigator.pushNamed(context, OrderScreen.routeName);
             },
             child: ListTile(
@@ -33,14 +37,16 @@ class AppDrawer extends StatelessWidget {
              title: Text('MyOrders'),
             ),
           ),
-          Divider(),
+
           GestureDetector(
             child: ListTile(
               leading: Icon(Icons.edit),
               title: Text('ManageProducts'),
             ),
             onTap: (){
+
               Navigator.of(context).pushNamed(ProductManageScreen.routeName);
+
 
             },
           ),

@@ -21,6 +21,8 @@ class _OrderScreenState extends State<OrderScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Orders'),
+        backgroundColor: Colors.transparent,
+
       ),
       drawer: AppDrawer(),
       body: ListView.builder(
