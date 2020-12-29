@@ -113,20 +113,23 @@ class CartItemWidget extends StatelessWidget {
             content: Text('Do you want to remove the item from the cart?'),
             actions: [
               FlatButton(
-                child: Text('Yes'),
+                child: Text('No'),
                 onPressed: (){
-                  Provider.of<Cart>(context).removeItem(id);
+                  Navigator.of(context).pop(false);
                 },
               ),
-              FlatButton(child:Text('No'),
+              FlatButton(child:Text('Yes'),
                 onPressed: (){
-                Navigator.of(context).pop(false);
+                Navigator.of(context).pop(true);
                 },
               )
             ],
           );
 
         });
+      },
+      onDismissed: (direction) {
+        return Provider.of<Cart>(context).removeItem(id);
       },
       child: Card(
         margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),

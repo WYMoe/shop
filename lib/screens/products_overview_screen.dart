@@ -89,6 +89,7 @@ class ProductsGrid extends StatelessWidget {
             crossAxisSpacing: 10,
             mainAxisSpacing: 10),
         itemBuilder: (context, index) {
+          // used Provider because we need to trigger isFavourite function in Product() but in other screens we don't need to do that
           return ChangeNotifierProvider.value(
             value: products[index],
             child: ProductItem(),
