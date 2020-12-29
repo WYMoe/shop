@@ -11,6 +11,10 @@ class Product with ChangeNotifier{
   Product({this.id, this.title, this.description, this.price, this.imageUrl,
       this.isFavourite = false});
 
+
+
+
+
   void toggleFavourite(){
     isFavourite = !isFavourite;
     notifyListeners();

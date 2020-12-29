@@ -12,7 +12,7 @@ class ProductItem extends StatelessWidget {
     final product = Provider.of<Product>(context, listen: false);
     final cartItem = Provider.of<Cart>(context, listen: false);
 
-    print('listening');
+
 
 
     return ClipRRect(
@@ -37,7 +37,7 @@ class ProductItem extends StatelessWidget {
           backgroundColor: Colors.black54,
           leading: Consumer<Product>(
             builder: (context, product, child) {
-              print('listening_consumer');
+
               return IconButton(
                   icon: Icon(product.isFavourite
                       ? Icons.favorite
