@@ -38,6 +38,7 @@ class MyApp extends StatelessWidget {
 
 
           ),
+          fontFamily: 'Nunito',
           primaryColor: Colors.white,
           primarySwatch: Colors.blue
           ,

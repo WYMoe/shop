@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shop/providers/product.dart';
 import 'package:shop/providers/products_provider.dart';
 
 class EditProductScreen extends StatefulWidget {
@@ -11,6 +10,7 @@ class EditProductScreen extends StatefulWidget {
 }
 
 class _EditProductScreenState extends State<EditProductScreen> {
+  FocusNode _titleFocus;
   FocusNode _priceFocus;
 
   FocusNode _descriptionFocus;
@@ -41,18 +41,26 @@ class _EditProductScreenState extends State<EditProductScreen> {
   @override
   void initState() {
     // TODO: implement initState
+    _titleFocus = FocusNode();
 
     _priceFocus = FocusNode();
     _descriptionFocus = FocusNode();
     _urlFocus = FocusNode();
+    _titleFocus.addListener(() {
+      setState(() {});
+    });
+    _descriptionFocus.addListener(() {
+      setState(() {});
+    });
+
     _urlFocus.addListener(_updateUrl);
     super.initState();
   }
 
-  _updateUrl(){
+  _updateUrl() {
     if (!_urlFocus.hasFocus) {
       if ((!_urlController.text.startsWith('http') &&
-          !_urlController.text.startsWith('https')) ||
+              !_urlController.text.startsWith('https')) ||
           (!_urlController.text.endsWith('.png') &&
               !_urlController.text.endsWith('.jpg') &&
               !_urlController.text.endsWith('.jpeg'))) {
@@ -71,7 +79,6 @@ class _EditProductScreenState extends State<EditProductScreen> {
     _urlFocus.dispose();
     _urlController.dispose();
 
-
     super.dispose();
   }
 
@@ -80,6 +87,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Edit Product'),
+        backgroundColor: Colors.transparent,
         actions: [
           IconButton(
             icon: Icon((Icons.save)),
@@ -99,12 +107,20 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   SizedBox(
                     height: 10.0,
                   ),
-
                   TextFormField(
                     decoration: InputDecoration(
+                      filled: true,
+                      labelStyle: TextStyle(
+                          color: _titleFocus.hasFocus
+                              ? Colors.blueGrey
+                              : Colors.blueGrey),
                       labelText: 'Title',
-                      border: OutlineInputBorder(),
+                      fillColor: Colors.blueGrey[30],
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blueGrey)),
+                      border: OutlineInputBorder(borderSide: BorderSide.none),
                     ),
+                    focusNode: _titleFocus,
                     textInputAction: TextInputAction.next,
                     onFieldSubmitted: (_) {
                       _priceFocus.requestFocus();
@@ -124,8 +140,16 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   ),
                   TextFormField(
                     decoration: InputDecoration(
+                      labelStyle: TextStyle(
+                          color: _priceFocus.hasFocus
+                              ? Colors.blueGrey
+                              : Colors.blueGrey),
                       labelText: 'Price',
-                      border: OutlineInputBorder(),
+                      filled: true,
+                      fillColor: Colors.blueGrey[30],
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blueGrey)),
+                      border: OutlineInputBorder(borderSide: BorderSide.none),
                     ),
                     focusNode: _priceFocus,
                     textInputAction: TextInputAction.next,
@@ -154,7 +178,17 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   ),
                   TextFormField(
                     decoration: InputDecoration(
-                        labelText: 'Description', border: OutlineInputBorder()),
+                      labelStyle: TextStyle(
+                          color: _descriptionFocus.hasFocus
+                              ? Colors.blueGrey
+                              : Colors.blueGrey),
+                      labelText: 'Description',
+                      filled: true,
+                      fillColor: Colors.blueGrey[30],
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blueGrey)),
+                      border: OutlineInputBorder(borderSide: BorderSide.none),
+                    ),
                     focusNode: _descriptionFocus,
                     maxLines: 3,
                     keyboardType: TextInputType.multiline,
@@ -183,8 +217,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       Container(
                         width: MediaQuery.of(context).size.width * 0.3,
                         height: MediaQuery.of(context).size.height * 0.2,
-                        decoration:
-                            BoxDecoration(border: Border.all(color: Colors.grey)),
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.blueGrey)),
                         child: _urlController.text.isEmpty
                             ? null
                             : FittedBox(
@@ -198,8 +232,18 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       Expanded(
                         child: TextFormField(
                           decoration: InputDecoration(
-                              labelText: 'ImageUrl',
-                              border: OutlineInputBorder()),
+                            labelStyle: TextStyle(
+                                color: _urlFocus.hasFocus
+                                    ? Colors.blueGrey
+                                    : Colors.blueGrey),
+                            labelText: 'ImageUrl',
+                            filled: true,
+                            fillColor: Colors.blueGrey[30],
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.blueGrey)),
+                            border:
+                                OutlineInputBorder(borderSide: BorderSide.none),
+                          ),
                           focusNode: _urlFocus,
                           controller: _urlController,
                           validator: (value) {
@@ -231,4 +275,3 @@ class _EditProductScreenState extends State<EditProductScreen> {
     );
   }
 }
-
