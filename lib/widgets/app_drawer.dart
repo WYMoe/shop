@@ -10,12 +10,20 @@ class AppDrawer extends StatelessWidget {
       
       child: Column(
         children: [
-          AppBar(
-            title:Text('Hello!'),
-            automaticallyImplyLeading: false,
-            backgroundColor: Colors.transparent,
-
-          ),
+          DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.black87
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text('Welcome to MyShop',
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    color: Colors.white
+                  ),),
+                ],
+              )),
           GestureDetector(
             onTap: (){
               Navigator.pop(context);
