@@ -23,8 +23,6 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
       appBar: AppBar(
         title: Text('MyShop'),
         backgroundColor: Colors.transparent,
-
-
         actions: [
           PopupMenuButton(
               onSelected: (FilterOptions option) {
@@ -47,21 +45,17 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
                     )
                   ]),
           Consumer<Cart>(
-              builder: (context, cart, child) =>
-                  Badge(
-                      color: Colors.redAccent,
-                      child: child,
-                      value: cart.getItemCount.toString()),
-
-          child: IconButton(icon: Icon(Icons.shopping_cart), onPressed: (){
-            Navigator.pushNamed(context, CartScreen.routeName);
-
-          }),
+            builder: (context, cart, child) => Badge(
+                color: Colors.redAccent,
+                child: child,
+                value: cart.getItemCount.toString()),
+            child: IconButton(
+                icon: Icon(Icons.shopping_cart),
+                onPressed: () {
+                  Navigator.pushNamed(context, CartScreen.routeName);
+                }),
           ),
-
-
         ],
-
       ),
       drawer: AppDrawer(),
       body: ProductsGrid(
@@ -83,20 +77,23 @@ class ProductsGrid extends StatelessWidget {
         ? productData.showOnlyFavourites()
         : productData.items;
 
-    return GridView.builder(
-        padding: const EdgeInsets.all(10.0),
-        itemCount: products.length,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio: 3 / 2,
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 10),
-        itemBuilder: (context, index) {
-          // used Provider because we need to trigger isFavourite function in Product() but in other screens we don't need to do that
-          return ChangeNotifierProvider.value(
-            value: products[index],
-            child: ProductItem(),
-          );
-        });
+    return
+
+        GridView.builder(
+            shrinkWrap: true,
+            padding: const EdgeInsets.all(10.0),
+            itemCount: products.length,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 3 / 2,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10),
+            itemBuilder: (context, index) {
+              // used Provider because we need to trigger isFavourite function in Product() but in other screens we don't need to do that
+              return ChangeNotifierProvider.value(
+                value: products[index],
+                child: ProductItem(),
+              );
+            });
   }
 }

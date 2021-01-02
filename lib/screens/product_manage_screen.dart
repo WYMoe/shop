@@ -79,7 +79,32 @@ class ProductWidget extends StatelessWidget {
               IconButton(
                 icon:Icon(Icons.delete),
                 onPressed: (){
+               showDialog(context: context,
+                  builder:(context){
+                 return AlertDialog(
+                   title: Text('Are you sure?'),
+                   content: Text('Do you want to delete this product?'),
+                   actions: [
+                     FlatButton(onPressed: (){
 
+                       Navigator.pop(context);
+                     }
+                         , child: Text('No')),
+
+                     FlatButton(onPressed: (){
+                       Provider.of<ProductsProvider>(context,listen: false).deleteProduct(id);
+                       Navigator.pop(context);
+
+                     }
+                     , child: Text('Yes')),
+
+
+                   ],
+                 );
+
+                   }
+
+               );
                 },
               )
             ],
