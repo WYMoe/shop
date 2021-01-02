@@ -3,7 +3,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shop/providers/product.dart';
 import 'package:shop/providers/products_provider.dart';
 import 'package:shop/screens/edit_product_screen.dart';
 import 'package:shop/widgets/app_drawer.dart';
@@ -35,7 +34,9 @@ class ProductManageScreen extends StatelessWidget {
           itemCount: products.items.length,
           itemBuilder: (context,index){
             return ProductWidget(
-              product: products.items[index],
+              id: products.items[index].id,
+              title: products.items[index].title,
+              url: products.items[index].imageUrl
             );
 
           }),
@@ -45,10 +46,12 @@ class ProductManageScreen extends StatelessWidget {
 
 
 class ProductWidget extends StatelessWidget {
- final Product product;
+ final String id;
+ final String url;
+ final String title;
 
 
- ProductWidget({this.product});
+ ProductWidget({this.id,this.url,this.title});
 
  @override
   Widget build(BuildContext context) {
@@ -56,11 +59,11 @@ class ProductWidget extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: ListTile(
         leading: CircleAvatar(
-          backgroundImage: NetworkImage(product.imageUrl)
+          backgroundImage: NetworkImage(url)
 
         ),
         title: Text(
-          product.title
+         title
         ),
         trailing: Container(
           width: 100,
@@ -69,6 +72,7 @@ class ProductWidget extends StatelessWidget {
               IconButton(
                 icon: Icon(Icons.edit),
                 onPressed: (){
+                  Navigator.of(context).pushNamed(EditProductScreen.routeName,arguments: id);
 
                 },
               ),

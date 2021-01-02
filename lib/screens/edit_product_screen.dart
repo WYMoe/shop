@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shop/providers/product.dart';
 import 'package:shop/providers/products_provider.dart';
 
 class EditProductScreen extends StatefulWidget {
@@ -12,35 +13,35 @@ class EditProductScreen extends StatefulWidget {
 class _EditProductScreenState extends State<EditProductScreen> {
   FocusNode _titleFocus;
   FocusNode _priceFocus;
-
   FocusNode _descriptionFocus;
-
   FocusNode _urlFocus;
 
   TextEditingController _urlController = TextEditingController();
 
-  String newTitle;
-  String newDescription;
-  double newPrice;
-  String newImageUrl;
+  ProductMedium productMedium = ProductMedium(
+    id: null,
+    description: '',
+    imageUrl: '',
+    title: '',
+    price: 0.0,
+  );
 
   final _formKey = GlobalKey<FormState>();
+  bool _isInit = true;
 
-  void _saveForm() {
-    if (_formKey.currentState.validate()) {
-      _formKey.currentState.save();
-      Provider.of<ProductsProvider>(context, listen: false).addProduct(
-          DateTime.now().toString(),
-          newTitle,
-          newDescription,
-          newPrice,
-          newImageUrl);
-    }
-  }
+  var _inItValues = {
+    'title': '',
+    'price' : '',
+    'description': '',
+    'url': '',
+
+  };
+
 
   @override
   void initState() {
     // TODO: implement initState
+
     _titleFocus = FocusNode();
 
     _priceFocus = FocusNode();
@@ -56,6 +57,58 @@ class _EditProductScreenState extends State<EditProductScreen> {
     _urlFocus.addListener(_updateUrl);
     super.initState();
   }
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      productMedium.id = ModalRoute.of(context).settings.arguments as String;
+      if (productMedium.id != null) {
+        var editProduct =
+            Provider.of<ProductsProvider>(context,listen: false).getByID(productMedium.id);
+        _inItValues = {
+          'title':  editProduct.title,
+          'price':editProduct.price.toString(),
+          'description':editProduct.description,
+          'url':editProduct.imageUrl
+        };
+        productMedium.isFavourite = editProduct.isFavourite;
+        _urlController.text = _inItValues['url'];
+      }
+    }
+
+    _isInit = false;
+
+    super.didChangeDependencies();
+  }
+
+  void _saveForm() {
+
+    if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
+      if(productMedium.id==null){
+        productMedium.id = DateTime.now().toString();
+        Provider.of<ProductsProvider>(context, listen: false).addProduct(
+            productMedium.id,
+            productMedium.title,
+            productMedium.description,
+            productMedium.price,
+            productMedium.imageUrl
+        );
+        Navigator.of(context).pop();
+      }else {
+        Provider.of<ProductsProvider>(context,listen: false).updateProduct(productMedium.id, Product(
+            id: DateTime.now().toString(),
+            title: productMedium.title,
+            price: productMedium.price,
+            imageUrl: productMedium.imageUrl,
+            description: productMedium.description,
+            isFavourite: productMedium.isFavourite
+        ));
+        Navigator.of(context).pop();
+      }
+    }
+  }
+
 
   _updateUrl() {
     if (!_urlFocus.hasFocus) {
@@ -74,6 +127,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
   void dispose() {
     // TODO: implement dispose
     _urlFocus.removeListener(_updateUrl);
+    _titleFocus.dispose();
     _priceFocus.dispose();
     _descriptionFocus.dispose();
     _urlFocus.dispose();
@@ -108,6 +162,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                     height: 10.0,
                   ),
                   TextFormField(
+                    initialValue: _inItValues['title'],
                     decoration: InputDecoration(
                       filled: true,
                       labelStyle: TextStyle(
@@ -132,13 +187,14 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       return null;
                     },
                     onSaved: (title) {
-                      newTitle = title;
+                      productMedium.title = title;
                     },
                   ),
                   SizedBox(
                     height: 10.0,
                   ),
                   TextFormField(
+                    initialValue: _inItValues['price'],
                     decoration: InputDecoration(
                       labelStyle: TextStyle(
                           color: _priceFocus.hasFocus
@@ -170,13 +226,14 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       return null;
                     },
                     onSaved: (price) {
-                      newPrice = double.parse(price);
+                      productMedium.price = double.parse(price);
                     },
                   ),
                   SizedBox(
                     height: 10.0,
                   ),
                   TextFormField(
+                    initialValue: _inItValues['description'],
                     decoration: InputDecoration(
                       labelStyle: TextStyle(
                           color: _descriptionFocus.hasFocus
@@ -205,7 +262,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       return null;
                     },
                     onSaved: (des) {
-                      newDescription = des;
+                      productMedium.description = des;
                     },
                   ),
                   SizedBox(
@@ -262,7 +319,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                             return null;
                           },
                           onSaved: (url) {
-                            newImageUrl = url;
+                            productMedium.imageUrl = url;
                           },
                         ),
                       ),
@@ -274,4 +331,21 @@ class _EditProductScreenState extends State<EditProductScreen> {
       ),
     );
   }
+}
+
+class ProductMedium {
+  String id;
+  String title;
+  String description;
+  double price;
+  String imageUrl;
+  bool isFavourite;
+
+  ProductMedium(
+      {this.id,
+      this.title,
+      this.description,
+      this.price,
+      this.imageUrl,
+      this.isFavourite = false});
 }

@@ -59,4 +59,14 @@ class ProductsProvider with ChangeNotifier {
             title: title));
     notifyListeners();
   }
+
+  void updateProduct(String id, Product product) {
+    var index = _items.indexWhere((product) => product.id == id);
+    if (index >= 0) {
+      _items[index] = product;
+      notifyListeners();
+    } else {
+
+    }
+  }
 }
