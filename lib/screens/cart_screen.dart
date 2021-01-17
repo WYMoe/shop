@@ -66,16 +66,7 @@ class CartScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(5.0),
                         color: Colors.black,
                       ),
-                      child: FlatButton(
-                          onPressed: () {
-                            orders.addOrder(
-                                cart.getTotal, cart.items.values.toList());
-                            cart.clear();
-                          },
-                          child: Text(
-                            "Place Order",
-                            style: TextStyle(color: Colors.white),
-                          )),
+                      child: OrderButton(orders: orders, cart: cart),
                     ),
                   ],
                 ),
@@ -85,6 +76,47 @@ class CartScreen extends StatelessWidget {
               height: MediaQuery.of(context).size.height * 0.03,
             )
           ],
+        ));
+  }
+}
+
+class OrderButton extends StatefulWidget {
+  const OrderButton({
+    Key key,
+    @required this.orders,
+    @required this.cart,
+  }) : super(key: key);
+
+  final Orders orders;
+  final Cart cart;
+
+  @override
+  _OrderButtonState createState() => _OrderButtonState();
+}
+
+class _OrderButtonState extends State<OrderButton> {
+  bool _isLoading = false;
+  @override
+  Widget build(BuildContext context) {
+    return FlatButton(
+        onPressed: (_isLoading==true||widget.cart.getTotal<=0)?null:()async {
+
+
+          setState(() {
+            _isLoading = true;
+          });
+
+          // to catch error and show dialog here
+         await widget.orders.addOrder(
+              widget.cart.getTotal, widget.cart.items.values.toList());
+          widget.cart.clear();
+          setState(() {
+            _isLoading = false;
+          });
+        },
+        child: _isLoading?CircularProgressIndicator():Text(
+          "Place Order",
+          style: TextStyle(color: Colors.white),
         ));
   }
 }
@@ -147,12 +179,11 @@ class CartItemWidget extends StatelessWidget {
             });
       },
       onDismissed: (direction) {
-        return Provider.of<Cart>(context).removeItem(id);
+        return Provider.of<Cart>(context,listen: false).removeItem(id);
       },
       child: Card(
         margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 15.0),
         child: ListTile(
-
           leading: Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.0),
@@ -168,10 +199,8 @@ class CartItemWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text('Total:\$${cartItem.quantity * cartItem.price}'),
-
             ],
           ),
-
           trailing: Text('X ${cartItem.quantity} '),
         ),
       ),

@@ -22,35 +22,28 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(
           value: ProductsProvider(),
         ),
-        ChangeNotifierProvider.value(
-            value: Cart()),
-        ChangeNotifierProvider.value(
-            value: Orders())
+        ChangeNotifierProvider.value(value: Cart()),
+        ChangeNotifierProvider.value(value: Orders())
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(
           appBarTheme: AppBarTheme(
-
             elevation: 0.0,
-
-
-
           ),
           fontFamily: 'Nunito',
           primaryColor: Colors.white,
-          primarySwatch: Colors.blue
-          ,
+          primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         home: ProductOverviewScreen(),
         routes: {
           ProductDetailScreen.routeName: (context) => ProductDetailScreen(),
           CartScreen.routeName: (context) => CartScreen(),
-          OrderScreen.routeName:(context) =>OrderScreen(),
-          ProductManageScreen.routeName:(context) => ProductManageScreen(),
-          EditProductScreen.routeName:(context) => EditProductScreen()
+          OrderScreen.routeName: (context) => OrderScreen(),
+          ProductManageScreen.routeName: (context) => ProductManageScreen(),
+          EditProductScreen.routeName: (context) => EditProductScreen()
         },
       ),
     );

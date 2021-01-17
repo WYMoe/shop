@@ -6,31 +6,49 @@ import 'package:shop/providers/orders.dart';
 import 'package:intl/intl.dart';
 import 'package:shop/widgets/app_drawer.dart';
 
-class OrderScreen extends StatefulWidget {
+class OrderScreen extends StatelessWidget {
   static const routeName = 'order_screen';
 
-  @override
-  _OrderScreenState createState() => _OrderScreenState();
-}
+  // @override
+  // void didChangeDependencies() async {
+  //   if (_isInIt) {
+  //     setState(() {
+  //       _isLoading = true;
+  //     });
+  //     await Provider.of<Orders>(context, listen: false).fetchOrders();
+  //     setState(() {
+  //       _isLoading = false;
+  //     });
+  //   }
+  //   _isInIt = false;
+  //   super.didChangeDependencies();
+  // }
 
-class _OrderScreenState extends State<OrderScreen> {
   @override
   Widget build(BuildContext context) {
-    final orders = Provider.of<Orders>(context);
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Orders'),
         backgroundColor: Colors.transparent,
-
       ),
       drawer: AppDrawer(),
-      body: ListView.builder(
-          itemCount: orders.orderItems.length,
-          itemBuilder: (context, index) {
-            return OrderItemWidget(
-              orderItem: orders.orderItems[index],
-            );
+      body: FutureBuilder(
+          future: Provider.of<Orders>(context, listen: false).fetchOrders(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+
+            return Consumer<Orders>(
+                builder: (context, orders, child) => ListView.builder(
+                    itemCount: orders.orderItems.length,
+                    itemBuilder: (context, index) {
+                      return OrderItemWidget(
+                        orderItem: orders.orderItems[index],
+                      );
+                    }));
           }),
     );
   }
@@ -66,7 +84,6 @@ class _OrderItemWidgetState extends State<OrderItemWidget> {
                 onPressed: () {
                   setState(() {
                     _expanded = !_expanded;
-                    print(_expanded);
                   });
                 },
               ),
@@ -75,9 +92,10 @@ class _OrderItemWidgetState extends State<OrderItemWidget> {
               Container(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
-                height: min(widget.orderItem.products.length * 20.0 + 100, 100),
+                height:
+                    min(widget.orderItem.cartItems.length * 20.0 + 100, 100),
                 child: ListView(
-                    children: widget.orderItem.products
+                    children: widget.orderItem.cartItems
                         .map((product) => Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [

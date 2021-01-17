@@ -6,17 +6,12 @@ import 'package:shop/providers/product.dart';
 import 'package:shop/screens/product_detail_screen.dart';
 
 class ProductItem extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     final product = Provider.of<Product>(context, listen: false);
     final cartItem = Provider.of<Cart>(context, listen: false);
 
-
-
-
     return ClipRRect(
-
       borderRadius: BorderRadius.circular(10.0),
       child: GridTile(
         child: GestureDetector(
@@ -37,7 +32,6 @@ class ProductItem extends StatelessWidget {
           backgroundColor: Colors.black54,
           leading: Consumer<Product>(
             builder: (context, product, child) {
-
               return IconButton(
                   icon: Icon(product.isFavourite
                       ? Icons.favorite
@@ -49,8 +43,9 @@ class ProductItem extends StatelessWidget {
           ),
           trailing: IconButton(
               icon: Icon(Icons.shopping_cart),
-              onPressed: () {
-                cartItem.addItem(product.id, product.title, product.price);
+              onPressed: () async {
+                await cartItem.addItem(
+                    product.id, product.title, product.price);
                 Scaffold.of(context).hideCurrentSnackBar();
                 Scaffold.of(context).showSnackBar(SnackBar(
                   duration: Duration(seconds: 1),

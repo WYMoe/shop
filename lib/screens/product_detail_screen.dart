@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop/providers/products_provider.dart';
@@ -15,7 +14,6 @@ class ProductDetailScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(loadedProduct.title),
         backgroundColor: Colors.transparent,
-
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -26,20 +24,22 @@ class ProductDetailScreen extends StatelessWidget {
               fit: BoxFit.cover,
               width: double.infinity,
               height: 300,
-
             ),
-            SizedBox(height: 10.0,),
-            Text('\$ ${loadedProduct.price}',
-              style: TextStyle(
-                  fontSize: 18.0,
-                color: Colors.grey
-              ),),
-            SizedBox(height: 10.0,),
-            Text(loadedProduct.description,
-              style: TextStyle(
-                fontSize: 20.0
-              ),
-              textAlign: TextAlign.center,)
+            SizedBox(
+              height: 10.0,
+            ),
+            Text(
+              '\$ ${loadedProduct.price}',
+              style: TextStyle(fontSize: 18.0, color: Colors.grey),
+            ),
+            SizedBox(
+              height: 10.0,
+            ),
+            Text(
+              loadedProduct.description,
+              style: TextStyle(fontSize: 20.0),
+              textAlign: TextAlign.center,
+            )
           ],
         ),
       ),
